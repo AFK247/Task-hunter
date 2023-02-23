@@ -1,12 +1,14 @@
 import axios from "axios";
 import React from "react";
 import { toast } from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BaseURL } from "../assets/baseURL/baseURL";
 
-let BaseURL="https://hello-production-7b72.up.railway.app/api/v1"
 //Login Page
 
 const Login = () => {
+  const navigate=useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
@@ -14,23 +16,38 @@ const Login = () => {
     const password = form.password.value;
     console.log(email, password);
 
-    axios.post(`${BaseURL}/user/loginUser`, {
+    axios
+      .post(`${BaseURL}/user/loginUser`, {
         email,
         password,
       })
       .then(function (response) {
-        console.log(response.data.user);
+        console.log(response.data);
 
-        if(response.data.user){
-          toast.success('Login Successfull');
-          window.open("/dashboard");
+        if (response.data.user) {
+          toast.success("Login Successfull");
+          const name = response.data.user.name;
+          const email = response.data.user.email;
+          const phone = response.data.user.phone;
+          const photo = response.data.user.photo;
+          const userName = response.data.user.userName;
+          const accessToken = response.data.accessToken;
+          
+          localStorage.setItem("name", name);
+          localStorage.setItem("email", email);
+          localStorage.setItem("phone", phone);
+          localStorage.setItem("photo", photo);
+          localStorage.setItem("userName", userName);
+          localStorage.setItem("accessToken", accessToken);
+
+          // window.location.href("/dashboard");
+          navigate("/dashboard");
         }
-        
       })
       .catch(function (error) {
         console.log(error);
 
-        toast.error('Wrong Credentials')
+        toast.error(error.message);
       });
   };
 
@@ -78,8 +95,10 @@ const Login = () => {
                     </button>
                     {/* <p className='text-danger text-center'>"Eror"</p>  */}
                     <p className="small pb-lg-2">
-                      
-                      <Link className="fs-6 mt-1 text-decoration-none" to="/forgetPassword">
+                      <Link
+                        className="fs-6 mt-1 text-decoration-none"
+                        to="/forgetPassword"
+                      >
                         Forget Password?
                       </Link>
                     </p>

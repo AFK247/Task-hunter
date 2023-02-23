@@ -1,22 +1,51 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { BaseURL } from "../assets/baseURL/baseURL";
 
 const ForgetPassword = () => {
+  const [email, setEmail] = useState("");
+  const navigate=useNavigate();
+  function handleClick() {
+    localStorage.setItem("tempEmail", email);
+
+    axios
+      .get(`${BaseURL}/user/sendOpt/${email}`)
+      .then(function (response) {
+        // handle success
+        console.log(response.data.message);
+        if (response.data.message) {
+          console.log(response.data.message);
+          alert(response.data.message);
+
+          navigate("/otp");
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error.message);
+      });
+  }
+
   return (
-    <div style={{margin:"11% 24%"}} class="card w-50  p-4">
-      <div class="card-body">
+    <div style={{ margin: "11% 24%" }} className="card w-50  p-4">
+      <div className="card-body">
         <h5>Email Address</h5>
         <br />
         <label>Your email address</label>
         <input
+          onChange={(event) => setEmail(event.target.value)}
           placeholder="User Email"
-          class="form-control animated fadeInUp"
+          className="form-control animated fadeInUp"
           type="email"
         />
         <br />
-        <Link to="/otp" class="btn w-100 animated fadeInUp float-end btn-primary">
+        <button
+          onClick={handleClick}
+          className="btn w-100 animated fadeInUp float-end btn-primary"
+        >
           Next
-        </Link>
+        </button>
       </div>
     </div>
   );

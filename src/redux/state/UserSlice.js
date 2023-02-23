@@ -7,15 +7,28 @@ export const UserSlice=createSlice({
         value:{}
     },
     reducers:{
-        increment:(state)=>{
-            state.value=state.value+1;
-        },
-        decrement:(state)=>{
-            state.value=state.value-1;
+        userInfo:(state)=>{
+            const realName = localStorage.getItem("name")
+            const email = localStorage.getItem("email")
+            const phone = localStorage.getItem("phone")
+            const photo = localStorage.getItem("photo")
+            const userName = localStorage.getItem("userName")
+            const accessToken = localStorage.getItem("accessToken")
+          
+          const user={
+            realName,
+            email,
+            phone,
+            photo,
+            userName,
+            accessToken
+          }
+        //   console.log(user);
+            state.value=user;
         }
     }
 
 })
 
-export const {increment,decrement} =UserSlice.actions;
+export const {userInfo} =UserSlice.actions;
 export default UserSlice.reducer;

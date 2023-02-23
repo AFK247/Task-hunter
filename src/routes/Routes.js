@@ -11,6 +11,7 @@ import DashboardLayout from "../components/layout/layout";
 import Main from "../components/Main";
 import ForgetPassword from "../pages/ForgetPassword";
 import Login from "../pages/Login";
+import NewPassword from "../pages/NewPassword";
 import OTP from "../pages/OTP";
 import Register from "../pages/Register";
 
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "/otp",
         element: <OTP></OTP>,
+      },
+      {
+        path: "/newPassword",
+        element: <NewPassword></NewPassword>,
       },
     ],
   },

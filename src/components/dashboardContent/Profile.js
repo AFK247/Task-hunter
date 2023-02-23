@@ -1,66 +1,79 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userInfo } from "../../redux/state/UserSlice";
 
 const Profile = () => {
+
+  const user=useSelector((state)=>state.user.value)
+  const {email,realName,userName,photo,phone}=user;
+  console.log(user);
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(userInfo())
+},[])
+  
+ 
   return (
-    <div class="card-body m-5">
+    <div className="card-body m-5">
         <h3>Profile</h3>
-      <div class="container-fluid">
+      <div className="container-fluid">
         <img
-          class="icon-nav-img-lg"
-          src="https://avatars.githubusercontent.com/u/65336862?v=4"
+          className="icon-nav-img-lg"
+          src={photo}
           alt="asif"
           style={{ maxWidth: "200px" }}
         />
         <hr />
-        <div class="row">
-          <div class="col-4 p-2">
+        <div className="row">
+          <div className="col-4 p-2">
             <label>Profile Picture</label>
             <input
               placeholder="User Email"
-              class="form-control animated fadeInUp"
+              className="form-control animated fadeInUp"
               type="file"
             />
           </div>
-          <div class="col-4 p-2">
+          <div className="col-4 p-2">
             <label>Email Address</label>
             <input
-              readonly=""
+              readOnly=""
               placeholder="User Email"
-              class="form-control animated fadeInUp"
+              className="form-control animated fadeInUp"
               type="email"
-              value="asifferdous23@gmail.com"
+              value={email}
             />
           </div>
-          <div class="col-4 p-2">
+          <div className="col-4 p-2">
             <label>User Name</label>
             <input
-              readonly=""
+              readOnly=""
               placeholder="User Name"
-              class="form-control animated fadeInUp"
+              className="form-control animated fadeInUp"
               type="text"
-              value="asif"
+              value={userName}
             />
           </div>
-          <div class="col-4 p-2">
+          <div className="col-4 p-2">
             <label>Name</label>
             <input
               placeholder="Name"
-              class="form-control animated fadeInUp"
+              className="form-control animated fadeInUp"
               type="text"
-              value="asif"
+              value={realName}
             />
           </div>
-          <div class="col-4 p-2">
+          <div className="col-4 p-2">
             <label>Mobile</label>
             <input
               placeholder="Mobile"
-              class="form-control animated fadeInUp"
+              className="form-control animated fadeInUp"
               type="number"
-              value="123"
+              value={phone}
             />
           </div>
-          <div class="col-4 p-2">
-            <button class="btn w-100 float-end btn-primary animated fadeInUp">
+          <div className="col-4 p-2">
+            <button className="btn w-100 float-end btn-primary animated fadeInUp">
               Update
             </button>
           </div>

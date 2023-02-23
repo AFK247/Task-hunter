@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 
 import { Link } from "react-router-dom";
-let BaseURL="https://hello-production-7b72.up.railway.app/api/v1"
+import { BaseURL } from "../assets/baseURL/baseURL";
 
 //Registration
 const Register = () => {

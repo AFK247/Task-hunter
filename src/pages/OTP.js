@@ -1,21 +1,54 @@
 import React, { useState } from "react";
-import OTPInput, { ResendOTP } from "otp-input-react";
+import OTPInput from "otp-input-react";
+import axios from "axios";
+import { BaseURL } from "../assets/baseURL/baseURL";
+import { Link, useNavigate } from "react-router-dom";
 
 const OTP = () => {
   const [OTP, setOTP] = useState("");
+  const navigate=useNavigate();
+  const email=localStorage.getItem("tempEmail")
+
   console.log(OTP);
+  console.log(email);
+
+  function clickHandler(){
+    console.log("clicked button");
+    localStorage.setItem("tempOTP", OTP);
+
+    axios.get(`${BaseURL}/user/verifyOtp/${email}/${OTP}`)
+      .then(function (response) {
+        // handle success
+        console.log(response.data.message);
+        if(response.data.message){
+          console.log(response.data.message);
+          alert(response.data.message);
+          navigate("/newPassword");
+        }
+
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+  }
+
   return (
-    <div className="d-flex">
+    <div style={{margin:"7% 39%",backgroundColor:"lightgray"}} className="rounded-4 p-5 col-4">
+      <h3 className="mb-3">OTP Verification</h3>
+      <h5>Check Your Mail</h5>
+      <div >
       <OTPInput
         value={OTP}
         onChange={setOTP}
         autoFocus
-        OTPLength={4}
-        otpType="number"
+        OTPLength={6}
+        otpType="alphanumeric"
         disabled={false}
         secure
       />
-      <ResendOTP className="btn" onResendClick={() => console.log("Resend clicked")} />
+      <Link onClick={clickHandler} className="btn btn-secondary mt-4">NEXT</Link>
+      </div>
       
     </div>
   );
