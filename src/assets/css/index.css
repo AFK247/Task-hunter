@@ -1,0 +1,8 @@
+a.side-bar-item.mt-2 {
+    background: purple;
+    color: #fff;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+    margin: 5px 0;
+}
