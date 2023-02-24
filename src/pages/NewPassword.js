@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { BaseURL } from "../assets/baseURL/baseURL";
 
@@ -25,7 +26,7 @@ const NewPassword = () => {
         })
         .then(function (response) {
           console.log(response.data);
-          alert(response.data.message);
+          toast.success(response.data.message)
           navigate("/");
         })
         .catch(function (error) {

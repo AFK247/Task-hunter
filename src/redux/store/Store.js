@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import LoadingSlice from "../state/LoadingSlice";
 import UserSlice from "../state/UserSlice";
 
 
@@ -8,5 +9,6 @@ export default configureStore({
 
     reducer:{
         user: UserSlice,
+        loading: LoadingSlice,
     }
 })

@@ -1,11 +1,15 @@
 import axios from "axios";
 import React from "react";
+import { toast } from "react-hot-toast";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BaseURL } from "../assets/baseURL/baseURL";
+import { setLoading } from "../redux/state/LoadingSlice";
 
 //Registration
 const Register = () => {
+
+  const navigate=useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -15,7 +19,8 @@ const Register = () => {
     const name = form.name.value;
     const userName = form.userName.value;
     const phone = form.phone.value;
-    console.log(email,name);
+    console.log(name,userName,email,phone,password);
+
     axios.post(`${BaseURL}/user/registrationUser`, {
       name,
       userName,
@@ -25,7 +30,9 @@ const Register = () => {
       })
       .then(function (response) {
         console.log(response.data);
-        
+        navigate("/");
+        toast.success("Registration Successful")
+
       })
       .catch(function (error) {
         console.log(error);

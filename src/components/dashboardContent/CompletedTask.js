@@ -8,7 +8,7 @@ const CompletedTask = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(()=>{
-    fetch(`${BaseURL}/task/selectTaskByStatus/new`, {
+    fetch(`${BaseURL}/task/selectTaskByStatus/complate`, {
       method: "GET", // or 'PUT'
       headers: {
         Accept: "application/json",

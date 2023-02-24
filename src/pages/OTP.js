@@ -3,6 +3,7 @@ import OTPInput from "otp-input-react";
 import axios from "axios";
 import { BaseURL } from "../assets/baseURL/baseURL";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const OTP = () => {
   const [OTP, setOTP] = useState("");
@@ -22,19 +23,20 @@ const OTP = () => {
         console.log(response.data.message);
         if(response.data.message){
           console.log(response.data.message);
-          alert(response.data.message);
+          toast.success(response.data.message)
           navigate("/newPassword");
         }
 
       })
       .catch(function (error) {
         // handle error
+        toast.error("Wrong OTP")
         console.log(error);
       })
   }
 
   return (
-    <div style={{margin:"7% 39%",backgroundColor:"lightgray"}} className="rounded-4 p-5 col-4">
+    <div style={{margin:"7% 34%",backgroundColor:"lightgray"}} className="rounded-4 p-5 col-4">
       <h3 className="mb-3">OTP Verification</h3>
       <h5>Check Your Mail</h5>
       <div >

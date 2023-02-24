@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { BaseURL } from "../../assets/baseURL/baseURL";
 
 const CreateTask = () => {
@@ -27,29 +28,13 @@ const CreateTask = () => {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
+          toast.success("Task Created Successfully");
+          form.reset();
     
         })
         .catch((error) => {
           console.error("Error:", error);
         });
-
-    // axios.post(`${BaseURL}/task/createTask`,{
-    //   method: "GET", // or 'PUT'
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${accessToken}`,
-    //   }, {
-    //   title,
-    //   body
-    //   })
-    //   .then(function (response) {
-    //     console.log(response.data);
-        
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
 
     
   };

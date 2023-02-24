@@ -1,4 +1,5 @@
 import { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 import "./App.css";
 import Spinner from "./components/Spinner";
@@ -7,15 +8,22 @@ import router from "./routes/Routes";
 
 
 
+
 function App() {
-  
+  const spinner=useSelector((state)=>state.loading.value);
   
   return (
     <div>
-      <Spinner/>
-      
-      <RouterProvider router={router}></RouterProvider>
-      <Toaster position="top-center" reverseOrder={false} />
+      {
+       spinner===true?
+        <Spinner></Spinner>
+       :
+        <>
+         <RouterProvider router={router}></RouterProvider>
+         <Toaster position="top-center" reverseOrder={false} />
+        </>
+
+      }
       
     </div>
   );

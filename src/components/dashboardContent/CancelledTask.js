@@ -7,7 +7,7 @@ const CancelledTask = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(()=>{
-    fetch(`${BaseURL}/task/selectTaskByStatus/new`, {
+    fetch(`${BaseURL}/task/selectTaskByStatus/canceled`, {
       method: "GET", // or 'PUT'
       headers: {
         Accept: "application/json",

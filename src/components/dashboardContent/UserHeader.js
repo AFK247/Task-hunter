@@ -15,7 +15,13 @@ const UserHeader = () => {
   }, []);
 
   function handleLogout() {
-      localStorage.removeItem("accessToken")
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("email");
+      localStorage.removeItem("name");
+      localStorage.removeItem("photo");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("phone");
+
       toast.success("Logout Successful")
       navigate("/");
   }
