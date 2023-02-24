@@ -15,7 +15,7 @@ const Register = () => {
     const name = form.name.value;
     const userName = form.userName.value;
     const phone = form.phone.value;
-
+    console.log(email,name);
     axios.post(`${BaseURL}/user/registrationUser`, {
       name,
       userName,

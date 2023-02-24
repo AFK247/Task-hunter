@@ -8,6 +8,7 @@ const ForgetPassword = () => {
   const navigate=useNavigate();
   function handleClick() {
     localStorage.setItem("tempEmail", email);
+    localStorage.setItem("spinner", true);
 
     axios
       .get(`${BaseURL}/user/sendOpt/${email}`)
@@ -16,6 +17,7 @@ const ForgetPassword = () => {
         console.log(response.data.message);
         if (response.data.message) {
           console.log(response.data.message);
+          localStorage.setItem("spinner", false);
           alert(response.data.message);
 
           navigate("/otp");
@@ -23,6 +25,7 @@ const ForgetPassword = () => {
       })
       .catch(function (error) {
         // handle error
+        localStorage.setItem("spinner", false);
         console.log(error.message);
       });
   }

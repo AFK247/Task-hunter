@@ -26,12 +26,15 @@ const Login = () => {
 
         if (response.data.user) {
           toast.success("Login Successfull");
+          
           const name = response.data.user.name;
           const email = response.data.user.email;
           const phone = response.data.user.phone;
           const photo = response.data.user.photo;
           const userName = response.data.user.userName;
           const accessToken = response.data.accessToken;
+          console.log(photo);
+          
           
           localStorage.setItem("name", name);
           localStorage.setItem("email", email);
@@ -39,7 +42,7 @@ const Login = () => {
           localStorage.setItem("photo", photo);
           localStorage.setItem("userName", userName);
           localStorage.setItem("accessToken", accessToken);
-
+          
           // window.location.href("/dashboard");
           navigate("/dashboard");
         }

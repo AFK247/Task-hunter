@@ -8,6 +8,7 @@ export const UserSlice=createSlice({
     },
     reducers:{
         userInfo:(state)=>{
+            
             const realName = localStorage.getItem("name")
             const email = localStorage.getItem("email")
             const phone = localStorage.getItem("phone")
