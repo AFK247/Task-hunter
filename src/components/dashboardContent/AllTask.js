@@ -5,28 +5,54 @@ import { BaseURL } from "../../assets/baseURL/baseURL";
 const AllTask = () => {
   const accessToken = localStorage.getItem("accessToken");
 
-
   const [tasks, setTasks] = useState([]);
+  const [fillterTasks, setFilterTasks] = useState(tasks);
 
-
-    useEffect(()=>{
-      fetch(`${BaseURL}/task/selectTask`, {
-        method: "GET", // or 'PUT'
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
+  useEffect(() => {
+    fetch(`${BaseURL}/task/selectTask`, {
+      method: "GET", // or 'PUT'
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("Success:", data);
+        setTasks(data);
+        setFilterTasks(data)
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          setTasks(data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    },[])
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, []);
+
+  function handleDate(event) {
+    event.preventDefault();
+    const form = event.target;
+    const ini=form.initial.value;
+    const initial=new Date(ini).getTime();
+    const fin=form.final.value;
+    const final=new Date(fin).getTime();
+
+
+    console.log(initial,final);
+
+    let temp=[];
+    tasks?.map((task) => {
+      let newDate = new Date(task.createdAt).toLocaleDateString();
+      let date = new Date(newDate).getTime();
+      
+            if((date>=initial-86400000) && (date<=final)){
+                temp.push(task);
+                console.log(date);
+            }
+    })
+    console.log(temp);
+    setFilterTasks(temp);
+
+  }
 
   // body: "Coding day and night"
   // createdAt: "2023-02-22T14:02:38.955Z"
@@ -34,66 +60,67 @@ const AllTask = () => {
   // title: "Code"
   // updatedAt: "2023-02-23T09:53:23.671Z"
   // userId: "asif"
-  function handleSubmit(event,ID){
-      event.preventDefault();
-      const form = event.target;
-      const status=form.select.value;
-      console.log(status,ID);
+  function handleSubmit(event, ID) {
+    event.preventDefault();
+    const form = event.target;
+    const status = form.select.value;
+    console.log(status, ID);
 
-      fetch(`${BaseURL}/task/updateTask/${ID}`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          status
-        }),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
+    fetch(`${BaseURL}/task/updateTask/${ID}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        status,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        toast.success(data.message);
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          toast.success(data.message);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          toast.error(error.message);
-        });
-
+      .catch((error) => {
+        console.error("Error:", error);
+        toast.error(error.message);
+      });
   }
 
   return (
     <div className="content-body container-fluid m-4">
       <div className="row p-0 m-0">
-        <div className="col-12 col-md-3 col-lg-3 px-3">
+        <div className="my-3">
           <h5>All Task</h5>
         </div>
-        <div className="col-12 col-md-3 col-lg-5 px-3">
-          <div className="row">
-            <div className="col-8">
-              <input type="date" className="form-control" />
-            </div>
-            <div className="col-4">
-              <button className="btn btn-primary">Search</button>
-            </div>
+
+        <form onSubmit={handleDate} className="d-flex mb-4">
+          
+          <div className="col-4">
+          <label>Start Date</label>
+            <input name="initial" type="date" className="form-control" />
           </div>
-        </div>
-        <div className="col-12 float-end col-md-4 col-lg-4 px-2">
-          <div className="row">
-            <div className="col-8">
-              <input className="form-control w-100" />
-            </div>
-            <div className="col-4">
-              <button className="btn btn-primary w-100">Search</button>
-            </div>
+
+          <div className="col-4 mx-4">
+          <label>End Date</label>
+            <input name="final" type="date" className="form-control" />
           </div>
-        </div>
+
+          <div className="col-4">
+            <button type="submit" className="btn btn-primary mt-4 ms-4">Filter</button>
+          </div>
+        </form>
+
       </div>
+
 
       <div className="">
         <div className="col-4 p-2">
-          {tasks.map((task) => {
+          {fillterTasks?.map((task) => {
+            let newDate = new Date(task.createdAt).toLocaleDateString();
+            let date = new Date(newDate).getTime();
+
             return (
               <div className="card h-50">
                 <div className="card-body">
@@ -111,11 +138,11 @@ const AllTask = () => {
                     >
                       <path d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z"></path>
                     </svg>
-                    {task.createdAt}
+                    {newDate}
                     <a
                       data-bs-toggle="modal"
                       data-bs-target="#exampleModal"
-                      className="icon-nav text-primary mx-1"
+                      className="icon-nav text-primary mx-4 "
                     >
                       <svg
                         stroke="currentColor"
@@ -146,60 +173,71 @@ const AllTask = () => {
                   </p>
                 </div>
                 <div
-        class="modal fade"
-        id="exampleModal"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">
-                Modal title
-              </h1>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <form onSubmit={(e)=>handleSubmit(e,task._id)} className="m-4">
-                  <label for="lang">Select Role</label>
-                  <select name="select">
-                    <option name="new" value="new">new</option>
-                    <option name="complate" value="complate">complate</option>
-                    <option name="pending" value="pending">pending</option>
-                    <option name="canceled" value="canceled">canceled</option>
-                  </select>
-                <br></br>
-                <button className="btn btn-primary my-3" type="submit">
-                  Submit
-                </button>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+                  class="modal fade"
+                  id="exampleModal"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                          Modal title
+                        </h1>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <form
+                          onSubmit={(e) => handleSubmit(e, task._id)}
+                          className="m-4"
+                        >
+                          <label for="lang">Select Role</label>
+                          <select name="select">
+                            <option name="new" value="new">
+                              new
+                            </option>
+                            <option name="complate" value="complate">
+                              complate
+                            </option>
+                            <option name="pending" value="pending">
+                              pending
+                            </option>
+                            <option name="canceled" value="canceled">
+                              canceled
+                            </option>
+                          </select>
+                          <br></br>
+                          <button
+                            className="btn btn-primary my-3"
+                            type="submit"
+                          >
+                            Submit
+                          </button>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              
             );
           })}
-          
         </div>
       </div>
-      
     </div>
   );
 };
