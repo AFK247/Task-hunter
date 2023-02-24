@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { setLoading } from "../redux/state/LoadingSlice";
 
 //Registration
 const Register = () => {
-
+  const [error,setError]=useState("");
   const navigate=useNavigate();
 
   const handleSubmit = (event) => {
@@ -20,6 +20,13 @@ const Register = () => {
     const userName = form.userName.value;
     const phone = form.phone.value;
     console.log(name,userName,email,phone,password);
+
+
+
+    if(!/(?=.*[!@#$&*])/.test(password)){
+      setError("Please use atleast 1 special character");
+      return;
+    }
 
     axios.post(`${BaseURL}/user/registrationUser`, {
       name,
@@ -100,7 +107,9 @@ const Register = () => {
                         name="password"
                         className="form-control form-control-lg"
                       />
+                      <p className="text-danger">{error}</p>
                     </div>
+                    
 
                     <button
                       className="btn btn-outline-warning px-4"
