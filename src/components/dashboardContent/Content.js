@@ -23,7 +23,6 @@ const Content = () => {
       .then((data) => {
 
         // dispatch(setLoading(false));
-
         console.log("Success:", data);
         setTasks(data);
       })
