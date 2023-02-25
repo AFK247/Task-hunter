@@ -1,10 +1,11 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { BaseURL } from "../assets/baseURL/baseURL";
 
 const NewPassword = () => {
+  const [error,setError]=useState("");
     const navigate=useNavigate();
     const email=localStorage.getItem("tempEmail");
     const otp=localStorage.getItem("tempOTP");
@@ -15,8 +16,21 @@ const NewPassword = () => {
     const form = event.target;
 
     const password = form.password.value;
-    
     const confirmPassword = form.confirmPassword.value;
+
+    if(password!==confirmPassword){
+      setError("Password Didn't Match");
+      return;
+    }
+
+
+    if(!/(?=.*[!@#$&*])/.test(password)){
+      setError("Please use atleast 1 special character");
+      return;
+    }
+
+    setError("")
+    
     console.log(email,otp,password);
 
     axios.post(`${BaseURL}/user/passwordRecovery`, {
@@ -73,6 +87,7 @@ const NewPassword = () => {
                   className="form-control animated fadeInUp"
                   type="password"
                 />
+                <p className="text-danger">{error}</p>
                 <br />
                 <button type="submit" className="btn w-100 animated fadeInUp float-end btn-primary">
                   Next

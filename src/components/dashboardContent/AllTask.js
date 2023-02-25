@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BaseURL } from "../../assets/baseURL/baseURL";
 import DashSpinner from "./DashSpinner";
 
+
 const AllTask = () => {
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
@@ -110,9 +111,12 @@ const AllTask = () => {
     }).then((response) => response.json())
     .then((data) => {
       console.log("Delete Success:", data);
+      toast.success("Deleted Successful");
+      navigate(0);
     })
     .catch((error) => {
       console.error("Error:", error);
+      toast.error(error.message)
     });
   }
 
@@ -168,16 +172,16 @@ const AllTask = () => {
                 <label className="m-4 fs-5">Select Role</label>
                 <select className="p-2" name="select">
                   <option name="new" value="new">
-                    new
+                    New
                   </option>
                   <option name="complate" value="complate">
-                    complate
+                    Complete
                   </option>
                   <option name="pending" value="pending">
-                    pending
+                    Pending
                   </option>
                   <option name="canceled" value="canceled">
-                    canceled
+                    Cancelled
                   </option>
                 </select>
                 <br></br>
@@ -196,7 +200,7 @@ const AllTask = () => {
 
       <div class="row row-cols-3 p-4 gap-4">
         {fillterTasks.length === 0 ? (
-          <DashSpinner></DashSpinner>
+          <h3>NO DATA...</h3>
         ) : (
           fillterTasks?.map((task) => {
             let newDate = new Date(task.createdAt).toLocaleDateString();

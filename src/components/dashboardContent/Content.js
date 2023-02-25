@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { BaseURL } from "../../assets/baseURL/baseURL";
+import { setLoading } from "../../redux/state/LoadingSlice";
 import DashSpinner from "./DashSpinner";
 
 const Content = () => {
   const accessToken = localStorage.getItem("accessToken");
-
+  const dispatch = useDispatch();
   const [tasks, setTasks] = useState([]);
 
   useEffect(()=>{
+    // dispatch(setLoading(true));
     fetch(`${BaseURL}/task/dashboardSummary`, {
       method: "GET", // or 'PUT'
       headers: {
@@ -18,21 +21,30 @@ const Content = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+
+        // dispatch(setLoading(false));
+
         console.log("Success:", data);
         setTasks(data);
       })
       .catch((error) => {
         console.error("Error:", error);
+
+        // dispatch(setLoading(false));
       });
   },[])
+
+    
 
   return (
     <div className="content container m-4">
       <div className="container">
         <div className="row">
+
           {
             tasks.length===0?
-            <DashSpinner></DashSpinner>
+              
+            <h4>No data...</h4>
             :
           tasks.map((task) => {
             return (
@@ -45,7 +57,9 @@ const Content = () => {
                 </div>
               </div>
             );
-          })}
+          })
+          }
+
         </div>
       </div>
     </div>

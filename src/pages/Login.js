@@ -1,16 +1,16 @@
 import axios from "axios";
 import React from "react";
 import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BaseURL } from "../assets/baseURL/baseURL";
-import { setLoading } from "../redux/state/LoadingSlice";
+// import { setLoading } from "../redux/state/LoadingSlice";
 
 //Login Page
 
 const Login = () => {
   const navigate=useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +19,7 @@ const Login = () => {
     const password = form.password.value;
     console.log(email, password);
 
-    dispatch(setLoading(true));
+    // dispatch(setLoading(true));
 
     axios
       .post(`${BaseURL}/user/loginUser`, {
@@ -48,13 +48,13 @@ const Login = () => {
           
           // window.location.href("/dashboard");
           
-          dispatch(setLoading(false));
+          // dispatch(setLoading(false));
           navigate("/dashboard");
         }
       })
       .catch(function (error) {
         console.log(error);
-        dispatch(setLoading(false));
+        // dispatch(setLoading(false));
         toast.error(error.message);
       });
   };

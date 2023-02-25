@@ -53,7 +53,7 @@ const CancelledTask = () => {
         </div>
       </div>
       <div className="row p-0 m-0">
-        <div className="col-12 col-lg-4 col-sm-6 col-md-4  p-2">
+      <div className="col-12 col-lg-4 col-sm-6 col-md-4  p-2">
         {tasks.map((task) => {
             return (
               <div className="card h-50">
