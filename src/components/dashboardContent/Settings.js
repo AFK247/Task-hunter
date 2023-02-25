@@ -1,22 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { BaseURL } from "../../assets/baseURL/baseURL";
 
 const Settings = () => {
   const accessToken = localStorage.getItem("accessToken");
   const email = localStorage.getItem("email");
+  const [error,setError]=useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
     
-
-    
-
     const form = event.target;
 
     const previousPassword = form.prePass.value;
     const newPassword = form.newPass.value;
     const confirmNewPass = form.confirmNewPass.value;
+
+    if(newPassword!==confirmNewPass){
+      setError("Password Didn't Match");
+      return;
+    }
+
+
+    if(!/(?=.*[!@#$&*])/.test(newPassword)){
+      setError("Please use atleast 1 special character");
+      return;
+    }
+
+    setError("")
 
     console.log(previousPassword,newPassword,email);
 
@@ -79,6 +90,7 @@ const Settings = () => {
                 type="password"
                 name="confirmNewPass"
               />
+              <p className="text-danger">{error}</p>
             </div>
             <div className="p-2">
               <button type="submit" className="btn w-100 float-end btn-primary animated fadeInUp">

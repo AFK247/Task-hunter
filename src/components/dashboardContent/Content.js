@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BaseURL } from "../../assets/baseURL/baseURL";
+import DashSpinner from "./DashSpinner";
 
 const Content = () => {
   const accessToken = localStorage.getItem("accessToken");
@@ -29,7 +30,11 @@ const Content = () => {
     <div className="content container m-4">
       <div className="container">
         <div className="row">
-          {tasks.map((task) => {
+          {
+            tasks.length===0?
+            <DashSpinner></DashSpinner>
+            :
+          tasks.map((task) => {
             return (
               <div className="col-12 col-lg-3 col-sm-6 col-md-3  p-2">
                 <div className="card h-100">

@@ -77,6 +77,7 @@ const Profile = () => {
         setImg(reader.result)
       }
       reader.readAsDataURL(file);
+      setError("")
     }
   
   }

@@ -24,6 +24,7 @@ const CancelledTask = () => {
         console.error("Error:", error);
       });
   },[])
+
     return (
         <div className="content-body container-fluid m-4">
       <div className="row p-0 m-0">

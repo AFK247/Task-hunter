@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { BaseURL } from "../../assets/baseURL/baseURL";
+import DashSpinner from "./DashSpinner";
 
 const AllTask = () => {
   const accessToken = localStorage.getItem("accessToken");
@@ -64,8 +65,8 @@ const AllTask = () => {
     event.preventDefault();
     const form = event.target;
     const status = form.select.value;
-    const ID=localStorage.getItem("ID");
-    console.log(status,ID);
+    const ID = localStorage.getItem("ID");
+    console.log(status, ID);
 
     fetch(`${BaseURL}/task/updateTask/${ID}`, {
       method: "PATCH",
@@ -82,24 +83,37 @@ const AllTask = () => {
       .then((data) => {
         console.log("Success:", data);
         toast.success(data.message);
-        if(status==="new"){
-          navigate("/dashboard/newTask")
+        if (status === "new") {
+          navigate("/dashboard/newTask");
+        } else if (status === "complate") {
+          navigate("/dashboard/completedTask");
+        } else if (status === "pending") {
+          navigate("/dashboard/pendingTask");
+        } else if (status === "canceled") {
+          navigate("/dashboard/cancelledTask");
         }
-        else if(status==="complate"){
-          navigate("/dashboard/completedTask")
-        }
-        else if(status==="pending"){
-          navigate("/dashboard/pendingTask")
-        }
-        else if(status==="canceled"){
-          navigate("/dashboard/cancelledTask")
-        }
-
       })
       .catch((error) => {
         console.error("Error:", error);
         toast.error(error.message);
       });
+  }
+
+  function handleDelete(id){
+    fetch(`${BaseURL}/task/deleteTask/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((response) => response.json())
+    .then((data) => {
+      console.log("Delete Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
   }
 
   return (
@@ -128,7 +142,7 @@ const AllTask = () => {
         </form>
       </div>
 
-     {/* Modal */}
+      {/* Modal */}
       <div
         class="modal fade"
         id="exampleModal"
@@ -180,45 +194,61 @@ const AllTask = () => {
         </div>
       </div>
 
-        <div class="row row-cols-3 p-4 gap-4">
-          {fillterTasks?.map((task) => {
+      <div class="row row-cols-3 p-4 gap-4">
+        {fillterTasks.length === 0 ? (
+          <DashSpinner></DashSpinner>
+        ) : (
+          fillterTasks?.map((task) => {
             let newDate = new Date(task.createdAt).toLocaleDateString();
 
             return (
-              
-              <div style={{width:"350px"}} class="col border rounded shadow-lg p-4">
+              <div
+                style={{ width: "350px" }}
+                class="col border rounded shadow-lg p-4"
+              >
                 <div class="card-body">
-                  <h5 class="card-title">{task.title}</h5>
-                  <p class="card-text">
-                    {task.body}
-                  </p>
-                  <div className="d-flex gap-3">
-                  <div class="card-text">
-                    <small class="text-muted">{newDate}</small>
-                  </div>
-
-                  <div class="card-text">
-                    <button data-bs-toggle="modal"
-                      data-bs-target="#exampleModal"
-                      className="icon-nav text-primary mx-4 "
-                       class="rounded"
-                      onClick={()=>localStorage.setItem("ID",task._id)}
-
-                       >
-                        Edit
-                        </button>
-                  </div>
-
-                  <div class="card-text">
-                    <p class="bg-info rounded ms-5 px-1 text-light">{task.status}</p>
-                  </div>
-                  </div>
                   
+                  <div className="d-flex justify-content-between">
+                   <h5 class="card-title">{task.title}</h5>
+                   <h6 class="bg-info rounded ms-3 px-1 text-light">{task.status}</h6> 
+                  </div>
+                  <p class="card-text">{task.body}</p>
+                  <div className="d-flex gap-3">
+                    <div class="card-text">
+                      <small class="text-muted">{newDate}</small>
+                    </div>
+
+                    <div class="card-text">
+                      <button
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                        className="icon-nav text-primary mx-4 "
+                        class="rounded"
+                        onClick={() => localStorage.setItem("ID", task._id)}
+                      >
+                        Edit
+                      </button>
+                    </div>
+
+                    <div class="card-text">
+                      <button
+                        className="icon-nav text-primary mx-4 "
+                        class="rounded"
+                        onClick={() => {
+                          handleDelete(task._id)
+                      }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+
+                    
+                  </div>
                 </div>
               </div>
             );
-          })}
-  
+          })
+        )}
       </div>
     </div>
   );
