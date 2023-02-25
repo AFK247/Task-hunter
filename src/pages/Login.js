@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
 // import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -58,6 +58,13 @@ const Login = () => {
         toast.error(error.message);
       });
   };
+
+  useEffect(()=>{
+    if(localStorage.getItem("accessToken")){
+      navigate("/dashboard");
+    }
+  },[])
+  
 
   return (
     <div>
