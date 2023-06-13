@@ -3,13 +3,22 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { Link, useNavigate } from "react-router-dom";
-import { BaseURL } from "../assets/baseURL/baseURL";
-import { setLoading } from "../redux/state/LoadingSlice";
+import { useRegisterMutation } from "../RTK/auth/authApi";
+import { useEffect } from "react";
 
 //Registration
 const Register = () => {
-  const [error,setError]=useState("");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const [register, { data, isLoading, error, isError }] = useRegisterMutation();
+
+  useEffect(() => {
+    if (data) {
+      navigate("/");
+      toast.success("Registration Successful");
+    } else if (isError) {
+      toast.error(error?.data?.message);
+    }
+  }, [data, isError, error]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,34 +28,14 @@ const Register = () => {
     const name = form.name.value;
     const userName = form.userName.value;
     const phone = form.phone.value;
-    console.log(name,userName,email,phone,password);
 
+    // if (!/(?=.*[!@#$&*])/.test(password)) {
+    //   setError("Please use atleast 1 special character");
+    //   return;
+    // }
 
-
-    if(!/(?=.*[!@#$&*])/.test(password)){
-      setError("Please use atleast 1 special character");
-      return;
-    }
-
-    axios.post(`${BaseURL}/user/registrationUser`, {
-      name,
-      userName,
-      email,
-      phone,
-      password
-      })
-      .then(function (response) {
-        console.log(response.data);
-        navigate("/");
-        toast.success("Registration Successful")
-
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    
+    register({ name, userName, email, phone, password });
   };
-
 
   return (
     <div>
@@ -107,9 +96,7 @@ const Register = () => {
                         name="password"
                         className="form-control form-control-lg"
                       />
-                      <p className="text-danger">{error}</p>
                     </div>
-                    
 
                     <button
                       className="btn btn-outline-warning px-4"
@@ -124,7 +111,6 @@ const Register = () => {
                         Log In Page
                       </Link>
                     </p>
-
                   </form>
                 </div>
               </div>

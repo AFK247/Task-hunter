@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { BaseURL } from "../assets/baseURL/baseURL";
 
 const NewPassword = () => {
-  const [error,setError]=useState("");
-    const navigate=useNavigate();
-    const email=localStorage.getItem("tempEmail");
-    const otp=localStorage.getItem("tempOTP");
-    console.log(otp);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const email = localStorage.getItem("tempEmail");
+  const otp = localStorage.getItem("tempOTP");
+  console.log(otp);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,35 +18,34 @@ const NewPassword = () => {
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
 
-    if(password!==confirmPassword){
+    if (password !== confirmPassword) {
       setError("Password Didn't Match");
       return;
     }
 
+    // if(!/(?=.*[!@#$&*])/.test(password)){
+    //   setError("Please use atleast 1 special character");
+    //   return;
+    // }
 
-    if(!/(?=.*[!@#$&*])/.test(password)){
-      setError("Please use atleast 1 special character");
-      return;
-    }
+    setError("");
 
-    setError("")
-    
-    console.log(email,otp,password);
+    console.log(email, otp, password);
 
-    axios.post(`${BaseURL}/user/passwordRecovery`, {
+    axios
+      .post(`${BaseURL}/user/passwordRecovery`, {
         email,
         otp,
-        password
-        })
-        .then(function (response) {
-          console.log(response.data);
-          toast.success(response.data.message)
-          navigate("/");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
+        password,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        toast.success(response.data.message);
+        navigate("/");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -89,7 +88,10 @@ const NewPassword = () => {
                 />
                 <p className="text-danger">{error}</p>
                 <br />
-                <button type="submit" className="btn w-100 animated fadeInUp float-end btn-primary">
+                <button
+                  type="submit"
+                  className="btn w-100 animated fadeInUp float-end btn-primary"
+                >
                   Next
                 </button>
               </form>

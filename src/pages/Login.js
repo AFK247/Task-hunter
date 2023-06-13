@@ -1,72 +1,37 @@
-import axios from "axios";
 import React, { useEffect } from "react";
-import { toast } from "react-hot-toast";
-// import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { BaseURL } from "../assets/baseURL/baseURL";
-// import { setLoading } from "../redux/state/LoadingSlice";
-
-//Login Page
+import { useLoginMutation } from "../RTK/auth/authApi";
+import { toast } from "react-hot-toast";
+import Spinner from "../components/Spinner";
 
 const Login = () => {
-  const navigate=useNavigate();
-  // const dispatch = useDispatch();
+  const [login, { data, isLoading, isError, error, isSuccess }] =
+    useLoginMutation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (data?.accessToken && data?.user) {
+      navigate("/dashboard");
+
+      toast.success("Login Successful");
+    } else if (isError) {
+      toast.error(error?.data?.message);
+    }
+  }, [data, isError, error]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
 
     // dispatch(setLoading(true));
-
-    axios
-      .post(`${BaseURL}/user/loginUser`, {
-        email,
-        password,
-      })
-      .then(function (response) {
-        console.log(response.data);
-
-        if (response.data.user) {
-          toast.success("Login Successfull");
-          const name = response.data.user.name;
-          const email = response.data.user.email;
-          const phone = response.data.user.phone;
-          const photo = response.data.user.photo;
-          const userName = response.data.user.userName;
-          const accessToken = response.data.accessToken;
-          // console.log(photo);
-          
-          localStorage.setItem("name", name);
-          localStorage.setItem("email", email);
-          localStorage.setItem("phone", phone);
-          localStorage.setItem("photo", photo);
-          localStorage.setItem("userName", userName);
-          localStorage.setItem("accessToken", accessToken);
-          
-          // window.location.href("/dashboard");
-          
-          // dispatch(setLoading(false));
-          navigate("/dashboard");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-        // dispatch(setLoading(false));
-        toast.error(error.message);
-      });
+    login({ email, password });
   };
 
-  useEffect(()=>{
-    if(localStorage.getItem("accessToken")){
-      navigate("/dashboard");
-    }
-  },[])
-  
-
-  return (
+  return isSuccess && isLoading ? (
+    <Spinner />
+  ) : (
     <div>
       <section className="vh-90 gradient-custom">
         <div className="container py-3 h-100">

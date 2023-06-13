@@ -1,30 +1,19 @@
-import { useEffect } from "react";
-import { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
-import { RouterProvider, useNavigate } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import "./App.css";
-import Spinner from "./components/Spinner";
 import router from "./routes/Routes";
-
+import useAuthCheck from "./hooks/useAuthCheck";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-  const spinner=useSelector((state)=>state.loading.value);
-  
-  
-  return (
-    <div>
-      {
-       spinner===true?
-        <Spinner></Spinner>
-       :
-        <>
-         <RouterProvider router={router}></RouterProvider>
-         <Toaster position="top-center" reverseOrder={false} />
-        </>
+  const authChecked = useAuthCheck();
 
-      }
-      
-    </div>
+  return !authChecked ? (
+    <div>Checking authentication....</div>
+  ) : (
+    <>
+      <RouterProvider router={router}></RouterProvider>
+      <Toaster position="top-center" reverseOrder={false} />
+    </>
   );
 }
 

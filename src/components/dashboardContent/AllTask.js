@@ -1,36 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { BaseURL } from "../../assets/baseURL/baseURL";
-import DashSpinner from "./DashSpinner";
-
+import {
+  useDeleteTaskMutation,
+  useGetTaskQuery,
+  useUpdateTaskMutation,
+} from "../../RTK/CRUD/content";
+import { useEffect } from "react";
+import Spinner from "../Spinner";
 
 const AllTask = () => {
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
+  const [details, setDetails] = useState("");
 
   const [fillterTasks, setFilterTasks] = useState(tasks);
 
+  const { data, isLoading, isError, error } = useGetTaskQuery();
+
+  const [
+    updatetask,
+    { data: updateData, isError: updateIsError, error: updateError },
+  ] = useUpdateTaskMutation();
+
+  const [
+    deleteTask,
+    {
+      data: deleteData,
+      error: deleteError,
+      isError: deleteIsError,
+      isLoading: deleteLoading,
+    },
+  ] = useDeleteTaskMutation();
+
   useEffect(() => {
-    fetch(`${BaseURL}/task/selectTask`, {
-      method: "GET", // or 'PUT'
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log("Success:", data);
-        setTasks(data);
-        setFilterTasks(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, []);
+    if (updateData) {
+      toast.success("Task Updated Successfully");
+    } else if (updateIsError) {
+      toast.error(updateError?.data?.message);
+    }
+  }, [updateData, updateError, updateIsError]);
+
+  useEffect(() => {
+    if (deleteData) {
+      toast.success("Task Deleted Successfully");
+    } else if (deleteIsError) {
+      toast.error(deleteError?.data?.message);
+    }
+  }, [deleteData, deleteError, deleteIsError]);
 
   function handleDate(event) {
     event.preventDefault();
@@ -40,8 +59,6 @@ const AllTask = () => {
     const fin = form.final.value;
     const final = new Date(fin).getTime();
 
-    console.log(initial, final);
-
     let temp = [];
     tasks?.map((task) => {
       let newDate = new Date(task.createdAt).toLocaleDateString();
@@ -49,75 +66,32 @@ const AllTask = () => {
 
       if (date >= initial - 86400000 && date <= final) {
         temp.push(task);
-        console.log(date);
       }
     });
-    console.log(temp);
     setFilterTasks(temp);
   }
 
-  // body: "Coding day and night"
-  // createdAt: "2023-02-22T14:02:38.955Z"
-  // status: "new"
-  // title: "Code"
-  // updatedAt: "2023-02-23T09:53:23.671Z"
-  // userId: "asif"
   function handleSubmit(event) {
     event.preventDefault();
     const form = event.target;
     const status = form.select.value;
-    const ID = localStorage.getItem("ID");
-    console.log(status, ID);
+    const body = form.details.value;
+    const id = details._id;
 
-    fetch(`${BaseURL}/task/updateTask/${ID}`, {
-      method: "PATCH",
-      body: JSON.stringify({
+    console.log();
+
+    updatetask({
+      id,
+      data: {
         status,
-      }),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        body,
       },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-        toast.success(data.message);
-        if (status === "new") {
-          navigate("/dashboard/newTask");
-        } else if (status === "complate") {
-          navigate("/dashboard/completedTask");
-        } else if (status === "pending") {
-          navigate("/dashboard/pendingTask");
-        } else if (status === "canceled") {
-          navigate("/dashboard/cancelledTask");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        toast.error(error.message);
-      });
+    });
   }
 
-  function handleDelete(id){
-    fetch(`${BaseURL}/task/deleteTask/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }).then((response) => response.json())
-    .then((data) => {
-      console.log("Delete Success:", data);
-      toast.success("Deleted Successful");
-      navigate(0);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      toast.error(error.message)
-    });
+  function handleDelete(id) {
+    console.log(id);
+    deleteTask(id);
   }
 
   return (
@@ -145,7 +119,6 @@ const AllTask = () => {
           </div>
         </form>
       </div>
-
       {/* Modal */}
       <div
         class="modal fade"
@@ -169,22 +142,46 @@ const AllTask = () => {
             </div>
             <div class="modal-body">
               <form onSubmit={handleSubmit} className="m-4">
-                <label className="m-4 fs-5">Select Role</label>
+                <label className="m-4 fs-6">Details</label>
+                <textarea
+                  defaultValue={details.body}
+                  name="details"
+                  type="text"
+                />
+                <br></br>
+                <label className="m-4 fs-6">Role</label>
                 <select className="p-2" name="select">
-                  <option name="new" value="new">
+                  <option
+                    selected={details.status === "new"}
+                    name="new"
+                    value="new"
+                  >
                     New
                   </option>
-                  <option name="complate" value="complate">
+                  <option
+                    selected={details.status === "complete"}
+                    name="complete"
+                    value="complete"
+                  >
                     Complete
                   </option>
-                  <option name="pending" value="pending">
+                  <option
+                    selected={details.status === "pending"}
+                    name="pending"
+                    value="pending"
+                  >
                     Pending
                   </option>
-                  <option name="canceled" value="canceled">
+                  <option
+                    selected={details.status === "cancelled"}
+                    name="cancelled"
+                    value="cancelled"
+                  >
                     Cancelled
                   </option>
                 </select>
                 <br></br>
+
                 <button
                   className="btn btn-primary my-3 ms-4"
                   type="submit"
@@ -197,12 +194,11 @@ const AllTask = () => {
           </div>
         </div>
       </div>
-
       <div class="row row-cols-3 p-4 gap-4">
-        {fillterTasks.length === 0 ? (
-          <h3>NO DATA...</h3>
+        {deleteLoading ? (
+          <Spinner />
         ) : (
-          fillterTasks?.map((task) => {
+          data?.map((task) => {
             let newDate = new Date(task.createdAt).toLocaleDateString();
 
             return (
@@ -211,10 +207,11 @@ const AllTask = () => {
                 class="col border rounded shadow-lg p-4"
               >
                 <div class="card-body">
-                  
                   <div className="d-flex justify-content-between">
-                   <h5 class="card-title">{task.title}</h5>
-                   <h6 class="bg-info rounded ms-3 px-1 text-light">{task.status}</h6> 
+                    <h5 class="card-title">{task.title}</h5>
+                    <h6 class="bg-info rounded ms-3 px-1 text-light">
+                      {task.status}
+                    </h6>
                   </div>
                   <p class="card-text">{task.body}</p>
                   <div className="d-flex gap-3">
@@ -228,7 +225,9 @@ const AllTask = () => {
                         data-bs-target="#exampleModal"
                         className="icon-nav text-primary mx-4 "
                         class="rounded"
-                        onClick={() => localStorage.setItem("ID", task._id)}
+                        onClick={() => {
+                          setDetails(task);
+                        }}
                       >
                         Edit
                       </button>
@@ -239,14 +238,12 @@ const AllTask = () => {
                         className="icon-nav text-primary mx-4 "
                         class="rounded"
                         onClick={() => {
-                          handleDelete(task._id)
-                      }}
+                          handleDelete(task._id);
+                        }}
                       >
                         Delete
                       </button>
                     </div>
-
-                    
                   </div>
                 </div>
               </div>

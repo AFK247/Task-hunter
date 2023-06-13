@@ -1,21 +1,21 @@
-import React, { useContext } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 //Private Route
 const PrivateRoute = ({ children }) => {
-    // const { user, loading } = useContext(AuthContext);
-    // const location = useLocation();
+  const user = useSelector((state) => state.auth.user);
+  // const location = useLocation();
+  const navigate = useNavigate();
 
-    // //loading spinner
-    // if (loading) {
-    //     return <h3>Loadinnnnnnnng</h3>
-    // }
+  return user ? children : navigate("/");
 
-    // if (user) {
-    //     return children;
-    // }
+  // if (user?.accessToken) {
+  //   return children;
+  // }
+  // console.log("niche ashce ");
 
-    // return <Navigate to="/login" state={{ from: location }} replace></Navigate>;
+  // return <Navigate to="/" state={{ from: location }} replace></Navigate>;
 };
 
 export default PrivateRoute;

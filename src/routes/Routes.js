@@ -14,12 +14,11 @@ import Login from "../pages/Login";
 import NewPassword from "../pages/NewPassword";
 import OTP from "../pages/OTP";
 import Register from "../pages/Register";
+import PrivateRoute from "./PrivateRoute";
 
 const { createBrowserRouter } = require("react-router-dom");
 
-
 const router = createBrowserRouter([
-  
   {
     path: "/",
     element: <Main></Main>,
@@ -48,44 +47,80 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout/>,
+    element: <DashboardLayout />,
     children: [
       {
         path: "/dashboard",
-        element: <Content></Content>,
+        element: (
+          <PrivateRoute>
+            <Content></Content>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/allTask",
-        element: <AllTask></AllTask>,
+        element: (
+          <PrivateRoute>
+            <AllTask></AllTask>
+          </PrivateRoute>
+        ),
       },
-      
+
       {
         path: "/dashboard/createTask",
-        element: <CreateTask></CreateTask>,
+        element: (
+          <PrivateRoute>
+            <CreateTask></CreateTask>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/newTask",
-        element: <NewTask></NewTask>,
+        element: (
+          <PrivateRoute>
+            <NewTask></NewTask>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/pendingTask",
-        element: <PendingTask></PendingTask>,
+        element: (
+          <PrivateRoute>
+            <PendingTask></PendingTask>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/cancelledTask",
-        element: <CancelledTask></CancelledTask>,
+        element: (
+          <PrivateRoute>
+            <CancelledTask></CancelledTask>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/completedTask",
-        element: <CompletedTask></CompletedTask>,
+        element: (
+          <PrivateRoute>
+            <CompletedTask></CompletedTask>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/profile",
-        element: <Profile></Profile>,
+        element: (
+          <PrivateRoute>
+            <Profile></Profile>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/dashboard/settings",
-        element:<Settings></Settings>,
+        element: (
+          <PrivateRoute>
+            <Settings></Settings>
+          </PrivateRoute>
+        ),
       },
     ],
   },
