@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BaseURL } from "../../assets/baseURL/baseURL";
 import { useGetTaskByStatusQuery } from "../../RTK/CRUD/content";
+import Spinner from "../Spinner";
 
 const PendingTask = () => {
   const { data, isLoading, isError, error } =
@@ -13,24 +14,39 @@ const PendingTask = () => {
           <h5>Pending Task</h5>
         </div>
       </div>
-      <div className="row p-0 m-0">
-        <div className="col-12 col-lg-4 col-sm-6 col-md-4  p-2">
-          {data?.map((task) => {
-            return (
-              <div className="card h-50">
-                <div className="card-body">
-                  <h6 className="animated fadeInUp">{task.title}</h6>
-                  <p className="animated fadeInUp">{task.body}</p>
-                  <p className="m-0 animated fadeInUp p-0">
-                    {task.createdAt}
 
-                    <a className="badge float-end bg-info">{task.status}</a>
-                  </p>
+      <div class="row row-cols-3 p-4 gap-4">
+        {isLoading ? (
+          <Spinner />
+        ) : data.length !== 0 ? (
+          data?.map((task) => {
+            let newDate = new Date(task.createdAt).toLocaleDateString();
+
+            return (
+              <div
+                style={{ width: "350px" }}
+                class="col border rounded shadow-lg p-4"
+              >
+                <div class="card-body">
+                  <div className="d-flex justify-content-between">
+                    <h5 class="card-title">{task.title}</h5>
+                    <h6 class="bg-info rounded ms-3 px-1 text-light">
+                      {task.status}
+                    </h6>
+                  </div>
+                  <p class="card-text">{task.body}</p>
+                  <div className="d-flex gap-3">
+                    <div class="card-text">
+                      <small class="text-muted">{newDate}</small>
+                    </div>
+                  </div>
                 </div>
               </div>
             );
-          })}
-        </div>
+          })
+        ) : (
+          <h3>No Data</h3>
+        )}
       </div>
     </div>
   );

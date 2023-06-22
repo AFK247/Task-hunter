@@ -195,9 +195,9 @@ const AllTask = () => {
         </div>
       </div>
       <div class="row row-cols-3 p-4 gap-4">
-        {deleteLoading ? (
+        {deleteLoading || isLoading ? (
           <Spinner />
-        ) : (
+        ) : data.length !== 0 ? (
           data?.map((task) => {
             let newDate = new Date(task.createdAt).toLocaleDateString();
 
@@ -249,6 +249,8 @@ const AllTask = () => {
               </div>
             );
           })
+        ) : (
+          <h3>No Data</h3>
         )}
       </div>
     </div>

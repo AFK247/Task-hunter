@@ -9,12 +9,14 @@ export const taskApi = apiSlice.injectEndpoints({
         url: "/tasks/getSummary",
         method: "GET",
       }),
+      providesTags: ["dashboard"],
     }),
     getTask: builder.query({
       query: () => ({
         url: "/tasks/getTasks",
         method: "GET",
       }),
+      providesTags: ["allTask"],
 
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
@@ -37,6 +39,7 @@ export const taskApi = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["dashboard"],
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const { data: newTask } = await queryFulfilled;
@@ -67,6 +70,7 @@ export const taskApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
+      invalidatesTags: ["dashboard"],
       // invalidatesTags: ["summary"],
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
@@ -90,6 +94,7 @@ export const taskApi = apiSlice.injectEndpoints({
         url: `/tasks/deleteTask/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["dashboard"],
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
           const { data: updatedItem } = await queryFulfilled;

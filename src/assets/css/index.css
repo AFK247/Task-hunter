@@ -1,10 +1,17 @@
-a.side-bar-item.mt-2 {
-    background: purple;
-    color: #fff;
+a.side-bar-item {
+    background: rgb(208, 236, 252);
+    color: #161515;
     padding: 10px;
     display: block;
     text-decoration: none;
     margin: 5px 0;
+    border-radius: 8px;
+}
+
+a.side-bar-item:hover{
+    transform: scale(1.08);
+    background: rgb(143, 208, 247);
+    transition: transform .3s;
 }
 
 .spinner{

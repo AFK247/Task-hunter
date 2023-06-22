@@ -31,13 +31,12 @@ const CreateTask = () => {
   return isLoading ? (
     <Spinner />
   ) : (
-    <div className="d-flex justify-content-center row w-50">
+    <div className="d-flex justify-content-center align-items-center row w-75">
       <div className="col-12 col-lg-8 col-sm-12 col-md-8  p-2 w-50">
         <div className="card">
           <div className="card-body">
-            <h4>Create New Task</h4>
+            <h2>Create New Task</h2>
             <form onSubmit={handleSubmit} className="mb-md-2 mt-md-2 ">
-              <h2 className="fw-bold mb-2 text-uppercase">New Task</h2>
               <p className="text-white-50 mb-5">
                 Log In with Email and Password!
               </p>
