@@ -28,43 +28,45 @@ const CreateTask = () => {
     });
   };
 
-  return isLoading ? (
-    <Spinner />
-  ) : (
+  return (
     <div className="d-flex justify-content-center align-items-center row w-75">
       <div className="col-12 col-lg-8 col-sm-12 col-md-8  p-2 w-50">
         <div className="card">
           <div className="card-body">
             <h2>Create New Task</h2>
-            <form onSubmit={handleSubmit} className="mb-md-2 mt-md-2 ">
-              <p className="text-white-50 mb-5">
-                Log In with Email and Password!
-              </p>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <form onSubmit={handleSubmit} className="mb-md-2 mt-md-2 ">
+                <p className="text-white-50 mb-5">
+                  Log In with Email and Password!
+                </p>
 
-              <div className="form-outline form-white mb-4">
-                <input
-                  placeholder="Task Name"
-                  type="text"
-                  name="task"
-                  className="form-control form-control-lg"
-                />
-              </div>
+                <div className="form-outline form-white mb-4">
+                  <input
+                    placeholder="Task Name"
+                    type="text"
+                    name="task"
+                    className="form-control form-control-lg"
+                  />
+                </div>
 
-              <div className="form-outline form-white mb-4">
-                <textarea
-                  placeholder="Task Description"
-                  type="text"
-                  name="details"
-                  className="form-control form-control-lg"
-                />
-              </div>
-              <button
-                className="btn btn-outline-warning mb-2 px-4"
-                type="submit"
-              >
-                Create
-              </button>
-            </form>
+                <div className="form-outline form-white mb-4">
+                  <textarea
+                    placeholder="Task Description"
+                    type="text"
+                    name="details"
+                    className="form-control form-control-lg"
+                  />
+                </div>
+                <button
+                  className="btn btn-outline-warning mb-2 px-4"
+                  type="submit"
+                >
+                  Create
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>

@@ -4,16 +4,15 @@ import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { BaseURL } from "../assets/baseURL/baseURL";
-import { setLoading } from "../redux/state/LoadingSlice";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
-  const dispatch=useDispatch();
-  const navigate=useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   function handleClick() {
     localStorage.setItem("tempEmail", email);
 
-    dispatch(setLoading(true));
+    //dispatch(setLoading(true));
     axios
       .get(`${BaseURL}/user/sendOpt/${email}`)
       .then(function (response) {
@@ -21,16 +20,16 @@ const ForgetPassword = () => {
         console.log(response.data.message);
         if (response.data.message) {
           console.log(response.data.message);
-          
-          toast.success(response.data.message)
-          dispatch(setLoading(false));
-          
+
+          toast.success(response.data.message);
+          //dispatch(setLoading(false));
+
           navigate("/otp");
         }
       })
       .catch(function (error) {
         // handle error
-        dispatch(setLoading(false));
+        //dispatch(setLoading(false));
         console.log(error.message);
       });
   }

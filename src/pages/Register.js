@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../RTK/auth/authApi";
 import { useEffect } from "react";
+import Spinner from "../components/Spinner";
 
 //Registration
 const Register = () => {
@@ -48,70 +49,74 @@ const Register = () => {
                 style={{ borderRadius: "1rem" }}
               >
                 <div className="card-body p-5 text-center">
-                  <form onSubmit={handleSubmit} className="mb-md-2 mt-md-2 ">
-                    <h2 className="fw-bold mb-2 text-uppercase">
-                      Registration
-                    </h2>
+                  {isLoading ? (
+                    <Spinner />
+                  ) : (
+                    <form onSubmit={handleSubmit} className="mb-md-2 mt-md-2 ">
+                      <h2 className="fw-bold mb-2 text-uppercase">
+                        Registration
+                      </h2>
 
-                    <div className="form-outline form-white mb-4">
-                      <input
-                        placeholder="Name"
-                        type="text"
-                        name="name"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
+                      <div className="form-outline form-white mb-4">
+                        <input
+                          placeholder="Name"
+                          type="text"
+                          name="name"
+                          className="form-control form-control-lg"
+                        />
+                      </div>
 
-                    <div className="form-outline form-white mb-4">
-                      <input
-                        placeholder="User Name"
-                        type="text"
-                        name="userName"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
+                      <div className="form-outline form-white mb-4">
+                        <input
+                          placeholder="User Name"
+                          type="text"
+                          name="userName"
+                          className="form-control form-control-lg"
+                        />
+                      </div>
 
-                    <div className="form-outline form-white mb-4">
-                      <input
-                        placeholder="Email"
-                        type="email"
-                        name="email"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
+                      <div className="form-outline form-white mb-4">
+                        <input
+                          placeholder="Email"
+                          type="email"
+                          name="email"
+                          className="form-control form-control-lg"
+                        />
+                      </div>
 
-                    <div className="form-outline form-white mb-4">
-                      <input
-                        placeholder="Phone"
-                        type="number"
-                        name="phone"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
+                      <div className="form-outline form-white mb-4">
+                        <input
+                          placeholder="Phone"
+                          type="number"
+                          name="phone"
+                          className="form-control form-control-lg"
+                        />
+                      </div>
 
-                    <div className="form-outline form-white mb-4">
-                      <input
-                        placeholder="Password"
-                        type="password"
-                        name="password"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
+                      <div className="form-outline form-white mb-4">
+                        <input
+                          placeholder="Password"
+                          type="password"
+                          name="password"
+                          className="form-control form-control-lg"
+                        />
+                      </div>
 
-                    <button
-                      className="btn btn-outline-warning px-4"
-                      type="submit"
-                    >
-                      Register
-                    </button>
+                      <button
+                        className="btn btn-outline-warning px-4"
+                        type="submit"
+                      >
+                        Register
+                      </button>
 
-                    <p className="small mb-5 pb-lg-2">
-                      Already Registered? Go to{" "}
-                      <Link className="text-primary fs-5" to="/">
-                        Log In Page
-                      </Link>
-                    </p>
-                  </form>
+                      <p className="small mb-5 pb-lg-2">
+                        Already Registered? Go to{" "}
+                        <Link className="text-primary fs-5" to="/">
+                          Log In Page
+                        </Link>
+                      </p>
+                    </form>
+                  )}
                 </div>
               </div>
             </div>

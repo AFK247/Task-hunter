@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
-import { toast } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { userInfo } from "../../redux/state/UserSlice";
+
 import { userLoggedOut } from "../../RTK/auth/authSlice";
-import { apiSlice } from "../../RTK/api/apiSlice";
 
 const UserHeader = () => {
   const navigate = useNavigate();
