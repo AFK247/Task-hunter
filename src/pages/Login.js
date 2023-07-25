@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../RTK/auth/authApi";
 import { toast } from "react-hot-toast";
 import Spinner from "../components/Spinner";
+import Loader from "../components/dashboardContent/Loader";
 
 const Login = () => {
   const [login, { data, isLoading, isError, error, isSuccess }] =
@@ -42,43 +43,44 @@ const Login = () => {
                 style={{ borderRadius: "1rem" }}
               >
                 <div className="card-body p-5 text-center">
-                  {isLoading ? (
-                    <Spinner />
-                  ) : (
-                    <form onSubmit={handleSubmit} className="mb-md-2 mt-md-2 ">
-                      <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
+                  <form onSubmit={handleSubmit} className="mb-md-2 mt-md-2 ">
+                    <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
 
-                      <p className="text-white-50 mb-5">
-                        Log In with Email and Password!
-                      </p>
+                    <p className="text-white-50 mb-5">
+                      Log In with Email and Password!
+                    </p>
 
-                      <div className="form-outline form-white mb-4">
-                        <input
-                          required
-                          placeholder="Email"
-                          type="email"
-                          name="email"
-                          className="form-control form-control-lg"
-                        />
-                      </div>
+                    <div className="form-outline form-white mb-4">
+                      <input
+                        required
+                        placeholder="Email"
+                        type="email"
+                        name="email"
+                        className="form-control form-control-lg"
+                      />
+                    </div>
 
-                      <div className="form-outline form-white mb-4">
-                        <input
-                          required
-                          placeholder="Password"
-                          type="password"
-                          name="password"
-                          className="form-control form-control-lg"
-                        />
-                      </div>
+                    <div className="form-outline form-white mb-4">
+                      <input
+                        required
+                        placeholder="Password"
+                        type="password"
+                        name="password"
+                        className="form-control form-control-lg"
+                      />
+                    </div>
+                    {isLoading ? (
+                      <Loader />
+                    ) : (
                       <button
                         className="btn btn-outline-warning mb-2 px-4"
                         type="submit"
                       >
                         Login
                       </button>
-                      {/* <p className='text-danger text-center'>"Eror"</p>  */}
-                      {/* <p className="small pb-lg-2">
+                    )}
+                    {/* <p className='text-danger text-center'>"Eror"</p>  */}
+                    {/* <p className="small pb-lg-2">
                       <Link
                         className="fs-6 mt-1 text-decoration-none"
                         to="/forgetPassword"
@@ -87,14 +89,13 @@ const Login = () => {
                       </Link>
                     </p> */}
 
-                      <p className="small pb-lg-2">
-                        Don't Have an Account{" "}
-                        <Link className="fs-5" to="/register">
-                          Register Now
-                        </Link>
-                      </p>
-                    </form>
-                  )}
+                    <p className="small pb-lg-2">
+                      Don't Have an Account{" "}
+                      <Link className="fs-5" to="/register">
+                        Register Now
+                      </Link>
+                    </p>
+                  </form>
                 </div>
               </div>
             </div>
